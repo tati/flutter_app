@@ -2,25 +2,29 @@ import 'package:flutter/material.dart';
 import 'astro_service.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const AstroDataApp());
 }
 
-class MyApp extends StatelessWidget {
+class AstroDataApp extends StatelessWidget {
+  const AstroDataApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Time and Date API Demo',
+      title: 'Astro Data Viewer',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AstroDataScreen(),
+      home: const AstroDataScreen(),
     );
   }
 }
 
 class AstroDataScreen extends StatefulWidget {
+  const AstroDataScreen({super.key});
+
   @override
-  _AstroDataScreenState createState() => _AstroDataScreenState();
+  State<AstroDataScreen> createState() => _AstroDataScreenState();
 }
 
 class _AstroDataScreenState extends State<AstroDataScreen> {
@@ -29,10 +33,11 @@ class _AstroDataScreenState extends State<AstroDataScreen> {
   Future<void> _fetchData() async {
     try {
       final data = await AstroService.fetchAstroData(
-        placeId: 'norway/oslo',
-        startDate: DateTime.now().toIso8601String().split('T').first,
-        endDate: DateTime.now().add(Duration(days: 1)).toIso8601String().split('T').first,
+        placeid: 'norway/oslo', // Replace with a valid placeid
+        startDate: DateTime.now().toIso8601String().split('T').first, // Current date
+        endDate: DateTime.now().add(const Duration(days: 1)).toIso8601String().split('T').first, // Next day
       );
+
       setState(() {
         _response = data;
       });
@@ -48,23 +53,21 @@ class _AstroDataScreenState extends State<AstroDataScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Astro Data Viewer'),
+        title: const Text('Astro Data Viewer'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Text(
-                  _response,
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
+            Text(
+              _response,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16),
             ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _fetchData,
-              child: Text('Fetch Astro Data'),
+              child: const Text('Fetch Astro Data'),
             ),
           ],
         ),
